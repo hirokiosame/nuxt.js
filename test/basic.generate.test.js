@@ -1,10 +1,11 @@
 import test from 'ava'
 import { resolve } from 'path'
+import { existsSync } from 'fs'
 import http from 'http'
 import serveStatic from 'serve-static'
 import finalhandler from 'finalhandler'
 import rp from 'request-promise-native'
-import { Nuxt, Builder, Generator } from '../index.js'
+import { Nuxt, Builder, Generator } from '..'
 
 const port = 4002
 const url = (route) => 'http://localhost:' + port + route
@@ -75,6 +76,8 @@ test('/async-data', async t => {
 test('/users/1', async t => {
   const html = await rp(url('/users/1'))
   t.true(html.includes('<h1>User: 1</h1>'))
+  t.true(existsSync(resolve(__dirname, 'fixtures/basic/dist', 'users/1/index.html')))
+  t.false(existsSync(resolve(__dirname, 'fixtures/basic/dist', 'users/1.html')))
 })
 
 test('/users/2', async t => {

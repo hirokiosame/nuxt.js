@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   srcDir: __dirname,
   router: {
@@ -14,8 +16,12 @@ module.exports = {
       ]
     }
   },
+  modulesDir: [
+    path.join(__dirname, '..', '..', '..', 'node_modules')
+  ],
   transition: 'test',
   layoutTransition: 'test',
+  loadingIndicator: 'circle',
   offline: true,
   plugins: [
     '~/plugins/test.js',
@@ -36,11 +42,20 @@ module.exports = {
     }
   },
   build: {
-    // extractCSS: true,
     publicPath: '/orion/',
     analyze: {
       analyzerMode: 'disabled',
       generateStatsFile: true
+    },
+    styleResources: {
+      patterns: [
+        '~/assets/pre-process.scss'
+      ]
+    },
+    babel: {
+      presets({ isServer }) {
+        return null // Coverage: Return null, so defaults will be used.
+      }
     },
     extend(config, options) {
       return Object.assign({}, config, {
